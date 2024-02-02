@@ -1,4 +1,3 @@
-import Image from "next/image";
 import ProductGridMember from "./product-grid-member";
 
 export default function ProductGrid() {
