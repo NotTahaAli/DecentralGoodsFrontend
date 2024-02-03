@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@metamask/eth-sig-util": "^7.0.1",
+    "@metamask/sdk-react": "^0.14.1",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18"

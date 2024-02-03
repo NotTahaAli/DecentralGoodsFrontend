@@ -1,12 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ProductGridMember(props: { sellerAddress: string, title: string, price: string, imgUrl: string, linkUrl: string }) {
+export type productDetail = {
+    sellerAddress: string,
+    title: string,
+    price: string,
+    imgUrl: string,
+    linkUrl: string
+}
+
+export default function ProductGridMember(props: productDetail) {
     const { sellerAddress, title, price, imgUrl, linkUrl } = props;
     let shortenedSellerAddress = sellerAddress.substring(0, 8) + "..." + sellerAddress.substring(sellerAddress.length - 4);
     return (
         <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
-            <Link href={linkUrl} className="block relative h-48 rounded overflow-hidden">
+            <Link href={linkUrl} target="_blank" className="block relative h-48 rounded overflow-hidden">
                 <div className="relative object-cover object-center w-full h-full block">
                     <Image alt="ecommerce" fill={true} src={imgUrl} />
                 </div>
