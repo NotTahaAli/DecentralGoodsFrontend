@@ -11,6 +11,7 @@
   "dependencies": {
     "@metamask/eth-sig-util": "^7.0.1",
     "@metamask/providers": "^14.0.2",
+    "dotenv": "^16.4.1",
     "ethers": "^6.10.0",
     "next": "14.1.0",
     "react": "^18",
