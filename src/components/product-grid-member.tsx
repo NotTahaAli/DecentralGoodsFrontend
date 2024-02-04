@@ -1,3 +1,4 @@
+import shortenAddress from "@/utils/shortenAddress";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,7 +12,7 @@ export type productDetail = {
 
 export default function ProductGridMember(props: productDetail) {
     const { sellerAddress, title, price, imgUrl, linkUrl } = props;
-    let shortenedSellerAddress = sellerAddress.substring(0, 8) + "..." + sellerAddress.substring(sellerAddress.length - 4);
+    let shortenedSellerAddress = shortenAddress(sellerAddress);
     return (
         <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
             <Link href={linkUrl} target="_blank" className="block relative h-48 rounded overflow-hidden">

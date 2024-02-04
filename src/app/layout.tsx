@@ -1,11 +1,10 @@
-'use client'
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { createContext, useEffect, useState } from "react";
-import { MetaMaskInpageProvider } from "@metamask/providers";
+import Provider from "@/providers/metamask";
+import ContractProvider from "@/providers/contract";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,33 +16,23 @@ export const metadata: Metadata = {
   }
 };
 
-export const metamaskContext = createContext<MetaMaskInpageProvider | undefined>(undefined);
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
 
-
-  const [provider, setProvider] = useState<MetaMaskInpageProvider | undefined>(undefined);
-
-  useEffect(() => {
-    if (window.ethereum && window.ethereum.isMetaMask) { setProvider(window.ethereum); }
-    else {
-      console.log("Install Metamask");
-    }
-  }, [])
-
   return (
     <html lang="en">
-      <metamaskContext.Provider value={provider}>
-        <body className={inter.className}>
-          <Header />
-          {children}
-          <Footer />
-        </body>
-      </metamaskContext.Provider>
+      <Provider>
+        <ContractProvider>
+          <body className={inter.className}>
+            <Header />
+            {children}
+            <Footer />
+          </body>
+        </ContractProvider>
+      </Provider>
     </html >
   );
 }
