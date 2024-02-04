@@ -1,15 +1,32 @@
+'use client'
 import ProductGrid from "@/components/product-grid";
+import { productDetail } from "@/components/product-grid-member";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [products, setProducts] = useState<productDetail[]>([]);
+
+  useEffect(() => {
+    fetch("https://decentral-goods-backend.vercel.app/listings?limit=25").then(async (res) => {
+      const data = (await res.json()).message;
+      for (const index in data) {
+        const product = data[index];
+        data[index] = {
+          sellerAddress: product.sellerAddress,
+          title: product.title,
+          imgUrl: product.imageUrl,
+          linkUrl: "/product/" + product.ListingId
+        }
+        data[index].price = 0;
+      }
+      setProducts(data);
+    });
+  }, [])
+
+
   return (
     <main className="">
-      <ProductGrid products={[
-        {sellerAddress: "0x1234567890", title: "Product 1", price: "0.1 ETH", imgUrl: "/img/test.jpeg", linkUrl: "/product/1"},
-        {sellerAddress: "0x1234567890", title: "Product 2", price: "0.2 ETH", imgUrl: "/img/test.jpeg", linkUrl: "/product/2"},
-        {sellerAddress: "0x1234567890", title: "Product 3", price: "0.3 ETH", imgUrl: "/img/test.jpeg", linkUrl: "/product/3"},
-        {sellerAddress: "0x1234567890", title: "Product 4", price: "0.4 ETH", imgUrl: "/img/test.jpeg", linkUrl: "/product/4"},
-        {sellerAddress: "0x1234567890", title: "Product 5", price: "0.5 ETH", imgUrl: "/img/test.jpeg", linkUrl: "/product/5"},
-      ]} />
+      <ProductGrid products={products} />
     </main>
   );
 }
