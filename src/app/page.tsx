@@ -16,7 +16,7 @@ export default function Home() {
       setProducts([]);
       return;
     }
-    fetch("https://decentral-goods-backend.vercel.app/listings?limit=25").then(async (res) => {
+    fetch("https://decentral-goods-backend.vercel.app/listings").then(async (res) => {
       const data = (await res.json()).message;
       for (const index in data) {
         const product = data[index];
