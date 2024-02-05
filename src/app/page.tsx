@@ -27,7 +27,7 @@ export default function Home() {
           linkUrl: "/product/" + product.ListingId
         }
         try {
-          data[index].price = await contract?.getOrderInfo(product.ListingId);
+          data[index].price = (await contract?.getListingInfo(product.ListingId))[0];
         } catch (err) {
           console.log("Problem in Blockchain Connection", err);
           data[index].price = 0;
@@ -40,6 +40,7 @@ export default function Home() {
 
   return (
     <main className="">
+      { products.length == 0 && <h1 className="text-3xl py-5 text-white bg-gray-900 body-font text-center">{connected ? "No Listings as of yet." : "Connect Wallet to Continue"}</h1>}
       <ProductGrid products={products} />
     </main>
   );

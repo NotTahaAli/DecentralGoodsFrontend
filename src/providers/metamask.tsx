@@ -1,8 +1,8 @@
 'use client'
 import { contractChainId } from "@/config/config";
-import hexer from "@/utils/hexer";
 import { MetaMaskInpageProvider } from "@metamask/providers";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { contractContext } from "./contract";
 
 export const metamaskContext = createContext<{
     provider?: MetaMaskInpageProvider,
@@ -22,6 +22,8 @@ export default function Provider({
     children: React.ReactNode;
 }>) {
 
+    const {signer} = useContext(contractContext);
+
     async function updatePublicKey(account: string) {
         const curTime = Date.now();
         console.log(JSON.stringify({
@@ -32,13 +34,14 @@ export default function Provider({
             "method": "eth_getEncryptionPublicKey",
             "params": [account]
         }));
-        const signature = await (provider?.request({
-            "method": "personal_sign",
-            "params": [
-                hexer(publicKey + " " + curTime),
-                account
-            ]
-        }))
+        // const signature = await (provider?.request({
+        //     "method": "personal_sign",
+        //     "params": [
+        //         hexer(publicKey + " " + curTime),
+        //         account
+        //     ]
+        // }))
+        const signature = await signer?.signMessage(publicKey + " " + curTime);
         const res = await fetch("https://decentral-goods-backend.vercel.app/publicKey/" + account, {
             method: "POST",
             headers: {
@@ -86,10 +89,15 @@ export default function Provider({
 
     async function connect() {
         setConnecting(true);
-        const accounts: any = await provider?.request({ method: 'eth_requestAccounts' });
-        setAccount(accounts[0]);
-        const account = accounts[0];
-        await setPublicKey(account);
+        try {
+            const accounts: any = await provider?.request({ method: 'eth_requestAccounts' });
+            setAccount(accounts[0]);
+            const account = accounts[0];
+            await setPublicKey(account);
+        } catch (err) {
+            setConnected(false);
+            console.log("Error while Connecting", err);
+        }
         setConnecting(false);
     }
 
