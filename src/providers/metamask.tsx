@@ -3,6 +3,8 @@ import { contractChainId } from "@/config/config";
 import { MetaMaskInpageProvider } from "@metamask/providers";
 import { createContext, useContext, useEffect, useState } from "react";
 import { contractContext } from "./contract";
+import { useRouter } from "next/router";
+import hexer from "@/utils/hexer";
 
 export const metamaskContext = createContext<{
     provider?: MetaMaskInpageProvider,
@@ -21,7 +23,6 @@ export default function Provider({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-
     const {signer} = useContext(contractContext);
 
     async function updatePublicKey(account: string) {
@@ -34,14 +35,13 @@ export default function Provider({
             "method": "eth_getEncryptionPublicKey",
             "params": [account]
         }));
-        // const signature = await (provider?.request({
-        //     "method": "personal_sign",
-        //     "params": [
-        //         hexer(publicKey + " " + curTime),
-        //         account
-        //     ]
-        // }))
-        const signature = await signer?.signMessage(publicKey + " " + curTime);
+        const signature = await (provider?.request({
+            "method": "personal_sign",
+            "params": [
+                hexer(publicKey + " " + curTime),
+                account
+            ]
+        }))
         const res = await fetch("https://decentral-goods-backend.vercel.app/publicKey/" + account, {
             method: "POST",
             headers: {

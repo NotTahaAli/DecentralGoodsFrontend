@@ -23,7 +23,8 @@ export default function Header() {
                 </Link>
                 {(connected && account) ?
                     <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-                        <Link href={"/orders"} className="mr-5 hover:text-white">My Orders</Link>
+                        <Link href={"/orders/buyer"} className="mr-5 hover:text-white">My Buyer Orders</Link>
+                        <Link href={"/orders/seller"} className="mr-5 hover:text-white">My Seller Orders</Link>
                         <Link href={"/product/new"} className="inline-flex items-center disabled:cursor-not-allowed disabled:bg-blue-300 bg-blue-600 text-white border-0 py-1 px-3 focus:outline-none hover:bg-blue-800 rounded text-base mt-4 md:mt-0">
                             New Listing
                         </Link>

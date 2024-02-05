@@ -6,11 +6,14 @@ import { EventLog } from "ethers";
 import { ContractTransactionResponse } from "ethers";
 import { parseUnits } from "ethers";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useContext, useEffect, useState } from "react"
 
 export default function NewProduct() {
 
-    const { connected, account, provider } = useContext(metamaskContext);
+    const router = useRouter();
+
+    const { connected, account } = useContext(metamaskContext);
     const [creating, setCreating] = useState(false);
     const [fileBase64, setFileBase64] = useState<string | null>(null);
     const [fileError, setFileError] = useState<string | null>(null);
@@ -54,7 +57,6 @@ export default function NewProduct() {
         (async () => {
             try {
                 const tx: ContractTransactionResponse = await contract?.listItem(priceNum, quantityNum);
-                console.log(tx);
                 const resp = await tx.wait();
                 if (resp == null) {
                     console.error("Failed to create product");
@@ -92,7 +94,7 @@ export default function NewProduct() {
                         console.error("Failed to create product", res);
                         return;
                     }
-                    window.location.href = "/product/" + listingId;
+                    router.push("/product/" + listingId);
                 } catch (err) {
                     console.error("Failed to create product", err);
                 }
@@ -151,7 +153,7 @@ export default function NewProduct() {
                                 <div className="p-2 w-1/2">
                                     <div className="relative">
                                         <label htmlFor="price" className="leading-7 text-sm text-gray-400">Price</label>
-                                        <input type="number" id="price" name="price" className="w-full bg-gray-800 bg-opacity-40 rounded border border-gray-700 focus:border-indigo-500 focus:bg-gray-900 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" min='0' required />
+                                        <input type="number" id="price" name="price" className="w-full bg-gray-800 bg-opacity-40 rounded border border-gray-700 focus:border-indigo-500 focus:bg-gray-900 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" min='0.000000001' step='0.000000001' required />
                                     </div>
                                 </div>
                                 <div className="p-2 w-1/2">
